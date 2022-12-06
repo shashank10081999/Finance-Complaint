@@ -4,7 +4,7 @@ from finance_complaint.constant.training_pipeline_config import PIPELINE_ARTIFAC
 from finance_complaint.constant.training_pipeline_config.data_ingestion import DATA_INGESTION_FILE_NAME , DATA_INGESTION_DATA_SOURCE_URL , DATA_INGESTION_FAILED_DIR , DATA_INGESTION_MIN_START_DATE , DATA_INGESTION_DIR,DATA_INGESTION_METADATA_FILE_NAME,DATA_INGESTION_DOWNLOAD_DATA_DIR,DATA_INGESTION_FEATURE_STORE_DIR
 from finance_complaint.entity.metadata_entity import DataIngestionMetadata
 from finance_complaint.constant import TIMESTAMP
-from finance_complaint.entity.config_entity import Data_ingestion_config , TrainingPipelineConfig
+from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig
 
 
 
@@ -49,7 +49,7 @@ class FinanceConfig():
 
             data_ingestion_failed_dir = os.path.join(data_ingestion_dir,DATA_INGESTION_FAILED_DIR)
 
-            data_ingestion_config = Data_ingestion_config(form_date=from_date , 
+            data_ingestion_config = DataIngestionConfig(form_date=from_date , 
                                                             to_data=to_date,
                                                             data_ingestion_dir= data_ingestion_dir,
                                                             download_dir= data_ingestion_download_dir,
