@@ -22,7 +22,7 @@ class FinanceConfig():
             return pipeline_config
         except Exception as e:
             raise e
-    def get_data_ingestion_config(self,from_date=DATA_INGESTION_MIN_START_DATE, to_date=None) -> Data_ingestion_config:
+    def get_data_ingestion_config(self,from_date=DATA_INGESTION_MIN_START_DATE, to_date=None) -> DataIngestionConfig:
         try:
             from_date = datetime.strptime(from_date, "%Y-%m-%d")
             if from_date > to_date:
