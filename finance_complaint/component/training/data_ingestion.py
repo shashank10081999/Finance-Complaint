@@ -36,7 +36,7 @@ class DataIngestion():
 
     def get_required_interval(self):
 
-        start_date = datetime.strptime(self.data_ingestion_config.from_date, "%Y-%m-%d")
+        start_date = datetime.strptime(self.data_ingestion_config.form_date, "%Y-%m-%d")
         end_date = datetime.strptime(self.data_ingestion_config.to_date, "%Y-%m-%d")
 
         n_diff_days = (end_date - start_date).days
@@ -54,11 +54,11 @@ class DataIngestion():
                                 periods=2).astype("str").tolist()
         
         else:
-            interval = pd.date_range(start=self.data_ingestion_config.from_date,end=self.data_ingestion_config.to_data,
+            interval = pd.date_range(start=self.data_ingestion_config.form_date,end=self.data_ingestion_config.to_date,
                                 freq=freq).astype("str").tolist()
 
-        if self.data_ingestion_config.to_data not in interval:
-            interval.append(self.data_ingestion_config.to_data)
+        if self.data_ingestion_config.to_date not in interval:
+            interval.append(self.data_ingestion_config.to_date)
 
         return interval
     
@@ -89,7 +89,7 @@ class DataIngestion():
     def download_data(self,download_url):
         try:
             download_dir = os.path.dirname(download_url.file_path)
-            os.makedirs(download_dir)
+            os.makedirs(download_dir , exist_ok = True)
 
             data = requests.get(download_url.url, params={'User-agent': f'your bot {uuid.uuid4()}'})
 
@@ -102,7 +102,7 @@ class DataIngestion():
 
             except Exception as e:
 
-                if os.path.exists(download_dir.file_path):
+                if os.path.exists(download_url.file_path):
                     os.remove(download_url.file_path)
                 self.retry_download_data(data, download_url=download_url)
 
@@ -125,12 +125,12 @@ class DataIngestion():
             content = data.content.decode("utf-8")
             wait_second = re.findall(r'\d+', content)
 
-            if wait_second>0:
+            if len(wait_second)>0:
                 time.sleep(int(wait_second[0])+2)
             
             failed_file_path = os.path.join(self.data_ingestion_config.failed_dir,os.path.basename(download_url.file_path))
 
-            os.makedirs(os.path.dirname(self.data_ingestion_config.failed_dir) , exist_ok=True)
+            os.makedirs(self.data_ingestion_config.failed_dir , exist_ok=True)
 
             with open(failed_file_path, "wb") as failed_file_obj:
                 failed_file_obj.write(data.content)
@@ -199,7 +199,7 @@ class DataIngestion():
         try:
 
 
-            if self.data_ingestion_config.form_date != self.data_ingestion_config.to_data:
+            if self.data_ingestion_config.form_date != self.data_ingestion_config.to_date:
                 self.download_files()
 
             if os.path.exists(self.data_ingestion_config.download_dir):
