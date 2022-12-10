@@ -31,7 +31,7 @@ class DataIngestion():
         n_month_interval: n month data will be downloded
         """
         self.data_ingestion_config = data_ingestion_config
-        self.failed_urls : list(DownloadUrl) = []
+        self.failed_urls : List[DownloadUrl] = []
         self.n_retry = n_retry
 
     def get_required_interval(self):
@@ -44,9 +44,9 @@ class DataIngestion():
         freq = None
         if n_diff_days > 365:
             freq = "Y"
-        if n_diff_days > 30:
+        elif n_diff_days > 30:
             freq = "M"
-        if n_diff_days > 7:
+        elif n_diff_days > 7:
             freq = "W"
         
         if freq is None:
@@ -78,7 +78,7 @@ class DataIngestion():
                 from_date , to_date = interval[index-1] , interval[index]
 
                 download_url : str = self.data_ingestion_config.datasource_url
-                url : str = download_url.replace("<to_date>" , to_date).replace("<from_date>" , from_date)
+                url : str = download_url.replace("<todate>" , to_date).replace("<fromdate>" , from_date)
                 file_name : str = f"{self.data_ingestion_config.file_name}_{from_date}_{to_date}.json"
                 file_path : str = os.path.join(self.data_ingestion_config.download_dir,file_name)
                 download_url = DownloadUrl(url = url , file_path=file_path , n_retry=self.n_retry)
@@ -91,17 +91,20 @@ class DataIngestion():
             download_dir = os.path.dirname(download_url.file_path)
             os.makedirs(download_dir , exist_ok = True)
 
+            print(download_url.url)
+            print(download_url.file_path)
+
             data = requests.get(download_url.url, params={'User-agent': f'your bot {uuid.uuid4()}'})
 
             try:
 
                 with open(download_url.file_path , "w") as file_obj:
-                    finance_complaint_data = list(map(lambda x:x["_source"]) , filter(lambda x: "_source" in x.keys() , data.content))
+                    finance_complaint_data = list(map(lambda x:x["_source"] , filter(lambda x: "_source" in x.keys() , json.loads(data.content))))
 
                     json.dump(finance_complaint_data , file_obj)
 
             except Exception as e:
-
+                
                 if os.path.exists(download_url.file_path):
                     os.remove(download_url.file_path)
                 self.retry_download_data(data, download_url=download_url)
@@ -119,7 +122,7 @@ class DataIngestion():
         """
         try:
             if download_url.n_retry == 0:
-                self.failed_urls.append(download_url.url)
+                self.failed_urls.append(download_url)
                 return 
         
             content = data.content.decode("utf-8")
@@ -186,7 +189,7 @@ class DataIngestion():
 
             metadata_info = DataIngestionMetadata(metadata_file_path=self.data_ingestion_config.metadata_file_path)
 
-            metadata_info.write_metadata_info(from_date= self.data_ingestion_config.form_date , to_date=self.data_ingestion_config.to_data,data_file_path=file_path)
+            metadata_info.write_metadata_info(from_date= self.data_ingestion_config.form_date , to_date=self.data_ingestion_config.to_date,data_file_path=file_path)
 
         except Exception as e:
             raise e 
