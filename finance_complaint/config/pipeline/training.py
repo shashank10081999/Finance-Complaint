@@ -1,11 +1,12 @@
 import os , sys
 from datetime import datetime
 from finance_complaint.constant.training_pipeline_config import PIPELINE_ARTIFACT_DIR , PIPELINE_NAME
-from finance_complaint.constant.training_pipeline_config.data_ingestion import DATA_INGESTION_FILE_NAME , DATA_INGESTION_DATA_SOURCE_URL , DATA_INGESTION_FAILED_DIR , DATA_INGESTION_MIN_START_DATE , DATA_INGESTION_DIR,DATA_INGESTION_METADATA_FILE_NAME,DATA_INGESTION_DOWNLOAD_DATA_DIR,DATA_INGESTION_FEATURE_STORE_DIR
+from finance_complaint.constant.training_pipeline_config.data_ingestion import *
 from finance_complaint.constant.training_pipeline_config.data_validation import *
+from finance_complaint.constant.training_pipeline_config.data_transformation import *
 from finance_complaint.entity.metadata_entity import DataIngestionMetadata
 from finance_complaint.constant import TIMESTAMP
-from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig
+from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig , DataTransformationConfig
 
 
 
@@ -77,12 +78,34 @@ class FinanceConfig():
             data_validation_rejected_dir = os.path.join(data_validation_path,DATA_VALIDATION_REJECTED_DATA_DIR)
 
             data_validation_config = DataValidationConfig(accepted_data_dir = data_validation_accepted_file_path ,
-                                                            rejected_data_dir = data_validation_rejected_dir
+                                                            rejected_data_dir = data_validation_rejected_dir,
                                                             file_name = DATA_VALIDATION_FILE_NAME)
 
             return data_validation_config
-        expect Exception as e:
-            raise e 
+        except Exception as e:
+            raise e
+
+    def get_transformation_config(self) -> DataTransformationConfig:
+        
+        try:
+            data_transformation_dir = os.path.join(self.training_pipeline_config.artifact_dir,DATA_TRANSFORMATION_DIR , self.timestamp)
+            transformated_export_pipeline_dir = os.path.join(data_transformation_dir,DATA_TRANSFORMATION_PIPELINE_DIR)
+            transformated_train_dir = os.path.join(data_transformation_dir,DATA_TRANSFORMATION_TRAIN_DIR)
+            transformated_test_dir = os.path.join(data_transformation_dir,DATA_TRANSFORMATION_TEST_DIR)
+            test_size = DATA_TRANSFORMATION_TEST_SIZE
+            transformated_file_name = DATA_TRANSFORMATION_FILE_NAME
+
+            data_transformation_config = DataTransformationConfig(file_name = transformated_file_name , 
+                                                                export_pipeline_dir = transformated_export_pipeline_dir,
+                                                                transformated_train_dir = transformated_train_dir,
+                                                                transformated_test_dir = transformated_test_dir,
+                                                                test_size = test_size)
+
+            return data_transformation_config
+        except Exception as e:
+            raise e
+            
+
         
 
 
