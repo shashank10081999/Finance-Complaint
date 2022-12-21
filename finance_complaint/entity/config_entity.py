@@ -7,3 +7,5 @@ DataIngestionConfig = namedtuple("Data_ingestion" , ["form_date" , "to_date" , "
 DataValidationConfig = namedtuple('DataValidationConfig', ["accepted_data_dir", "rejected_data_dir", "file_name"])
 
 DataTransformationConfig = namedtuple("DataTransformationConfig", ["file_name" , "export_pipeline_dir" , "transformated_train_dir", "transformated_test_dir","test_size"])
+
+ModelTtrainerConfig = namedtuple("ModelTrainerConfig" , ["base_accuracy", "trained_model_file_path", "metric_list", 'label_indexer_model_dir'])

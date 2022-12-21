@@ -54,14 +54,22 @@ class DerivedFeatureGenerator(Transformer, HasInputCols, HasOutputCols,DefaultPa
 
 class FrequencyImputer(Estimator ,HasInputCols, HasOutputCols,DefaultParamsReadable, DefaultParamsWritable):
 
+    """
+    To build a custom transformer in pyspark , we need write 2 diff class one is 'FrequencyImputer' and 'FrequencyImputerModel' 
+    2nd class name should end with 'Model'
+    1st class will have the fit function and 2nd class will have the transform function
+    """
     @keyword_only
     def __init__(self, inputCols: List[str] = None, outputCols: List[str] = None, ):
+        """
+        @keyword_only - A decorator that forces keyword arguments in the wrapped method and saves actual input keyword arguments in _input_kwargs
+        """
         super(FrequencyImputer, self).__init__()
-        self.topCategorys = Param(self, "topCategorys", "")
-        self._setDefault(topCategorys="")
-        kwargs = self._input_kwargs
+        self.topCategorys = Param(self, "topCategorys", "") # here we have to declare the parameter that we learned in the fit function
+        self._setDefault(topCategorys="") # here we are giving the default value for the parameters
+        kwargs = self._input_kwargs # taking all the parameters 
         print(kwargs)
-        self.setParams(**kwargs)
+        self.setParams(**kwargs) # here we are going to a below function , where are set the inputcols and outputcols
 
     @keyword_only
     def setParams(self, inputCols: List[str] = None, outputCols: List[str] = None, ):
@@ -70,10 +78,12 @@ class FrequencyImputer(Estimator ,HasInputCols, HasOutputCols,DefaultParamsReada
 
     @keyword_only
     def setTopCategorys(self, value: List[str]):
+        "here are setting value to the variable topCategorys"
         return self._set(topCategorys=value)
 
     @keyword_only
     def getTopCategorys(self):
+        "function will return the value in the topCategorys variable"
         return self.getOrDefault(self.topCategorys)
 
     @keyword_only
@@ -81,7 +91,7 @@ class FrequencyImputer(Estimator ,HasInputCols, HasOutputCols,DefaultParamsReada
         return self._set(inputCols = value)
     
     @keyword_only
-    def setOutputCols(self,value:List[str = None]):
+    def setOutputCols(self,value:List[str] = None):
         return self._set(outputCols = value)
     
     def _fit(self,dataset : DataFrame):

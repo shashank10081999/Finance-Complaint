@@ -6,7 +6,7 @@ from finance_complaint.constant.training_pipeline_config.data_validation import 
 from finance_complaint.constant.training_pipeline_config.data_transformation import *
 from finance_complaint.entity.metadata_entity import DataIngestionMetadata
 from finance_complaint.constant import TIMESTAMP
-from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig , DataTransformationConfig
+from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig , DataTransformationConfig,ModelTrainerConfig
 
 
 
@@ -104,6 +104,9 @@ class FinanceConfig():
             return data_transformation_config
         except Exception as e:
             raise e
+
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        
             
 
         

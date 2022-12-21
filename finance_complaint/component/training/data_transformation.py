@@ -114,7 +114,44 @@ class DataTransformation():
             transformed_trained_dataframe = tarnsformed_pipeline.transform(train_dataframe)
             transformed_trained_dataframe = transformed_trained_dataframe.select(required_columns)
 
+            transformed_test_dataframe = tarnsformed_pipeline.transform(test_dataframe)
+            transformed_test_dataframe = transformed_test_dataframe.select(required_columns)
+
+            export_pipeline_file_path = self.data_transformation_config.export_pipeline_dir
+
+            os.makedirs(export_pipeline_file_path , exist_ok=True )
+
+            os.makedirs(self.data_transformation_config.transformated_train_dir , exist_ok=True)
+
+            os.makedirs(self.data_transformation_config.transformated_test_dir , exist_ok = True)
+
+            transformed_train_data_file_path = os.path.join(self.data_transformation_config.transformated_train_dir , self.data_transformation_config.file_name)
+
+            transformed_test_data_file_path = os.path.join(self.data_transformation_config.transformated_test_dir , self.data_transformation_config.file_name)
+
+            tarnsformed_pipeline.save(export_pipeline_file_path)
+
+            transformed_trained_dataframe.write.parquet(transformed_train_data_file_path)
+
+            transformed_test_dataframe.write.parquet(transformed_test_data_file_path)
+
+            data_transformation_artifact = DataTransformationArtifact(
+                                                                        export_pipeline_file_path = export_pipeline_file_path,
+                                                                        transformed_train_file_path = transformed_train_data_file_path,
+                                                                        transformed_test_file_path = transformed_test_data_file_path
+
+                                                                        )
             
+            return data_transformation_artifact
+        
+        except Exception as e:
+            raise e
+
+
+
+
+
+
 
 
 
