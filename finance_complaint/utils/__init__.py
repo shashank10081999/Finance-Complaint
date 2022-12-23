@@ -1,5 +1,6 @@
 import os , sys 
 import yaml
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 
 
 
@@ -18,3 +19,15 @@ def read_yaml_file(file_path):
             return yaml.load(yaml_file)
     except Exception as e:
         raise e
+
+def get_score(metric , dataframe , label_col , predicted_col) -> float :
+    try:
+
+        evaluator  = MulticlassClassificationEvaluator(labelCol = label_col , predictionCol = predicted_col ,
+                                                        metricName = metric)
+        score = evaluator.evaluate(dataframe)
+
+        return score 
+
+    except Exception as e:
+        raise e 
