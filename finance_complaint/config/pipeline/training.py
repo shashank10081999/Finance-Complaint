@@ -5,9 +5,12 @@ from finance_complaint.constant.training_pipeline_config.data_ingestion import *
 from finance_complaint.constant.training_pipeline_config.data_validation import *
 from finance_complaint.constant.training_pipeline_config.data_transformation import *
 from finance_complaint.constant.training_pipeline_config.model_trainer import *
+from finance_complaint.constant.training_pipeline_config.model_evaluation import *
+from finance_complaint.constant.training_pipeline_config.model_pusher import *
+from finance_complaint.constant.model import *
 from finance_complaint.entity.metadata_entity import DataIngestionMetadata
 from finance_complaint.constant import TIMESTAMP
-from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig , DataTransformationConfig,ModelTrainerConfig
+from finance_complaint.entity.config_entity import DataIngestionConfig , TrainingPipelineConfig ,DataValidationConfig , DataTransformationConfig,ModelTrainerConfig,ModelEvaluationConfig,ModelPusherConfig
 
 
 
@@ -122,7 +125,32 @@ class FinanceConfig():
             return model_trainer_config
             
         except Exception as e:
+            raise e
+    
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        try:
+            model_evaluation_dir = os.path.join(self.pipeline_config.artifact_dir, MODEL_EVALUATION_DIR)
+
+            model_evaluation_report_file_path = os.path.join(model_evaluation_dir, MODEL_EVALUATION_REPORT_DIR ,MODEL_EVALUATION_REPORT_FILE_NAME)
+
+            model_evaluation_config = ModelEvaluationConfig(model_evaluation_report_file_path= model_evaluation_dir,
+                                                            bucket_name= S3_MODEL_BUCKET_NAME,
+                                                            metric_list= MODEL_EVALUATION_METRIC_NAMES,
+                                                            model_dir = S3_MODEL_DIR_KEY,
+                                                            threshold = MODEL_EVALUATION_THRESHOLD_VALUE)
+        except Exception as e:
+            raise e
+    
+    def get_model_pusher_config(self) -> ModelPusherConfig:
+        try:
+            model_pusher_config = ModelPusherConfig(model_dir = S3_MODEL_DIR_KEY , bucket_name = S3_MODEL_BUCKET_NAME)
+
+            return get_model_pusher_config
+            
+        except Exception as e:
             raise e 
+
+
 
 
 

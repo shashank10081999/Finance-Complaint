@@ -1,6 +1,5 @@
 from typing import List
 from pyspark.sql.types import TimestampType, StringType, FloatType, StructType, StructField
-from finance_complaint.exception import FinanceException
 import os, sys
 
 from pyspark.sql import DataFrame

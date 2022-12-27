@@ -32,7 +32,27 @@ class ModelTrainerArtifact():
             response["model_trainer_train_metric_artifact"] = self.model_trainer_train_metric_artifact._asdict()
             response["model_trainer_test_metric_artifact"] = self.model_trainer_test_metric_artifact._asdict()
         except Exception as e:
-            raise e 
+            raise e
+
+
+class ModelEvaluationArtifact():
+
+    def __init__(self, model_accepted, changed_accuracy, trained_model_path, best_model_path, active,*args,**kwargs):
+        self.model_accepted = model_accepted
+        self.changed_accuracy = changed_accuracy
+        self.trained_model_file_path = self.trained_model_file_path
+        self.best_model_path = best_model_path
+        self.active = active
+        self.created_time = datetime.now() 
+
+    def to_dict(self):
+        return self.__dict__
+    
+    def __str__(self):
+        return str(self.to_dict())
+
+ModelPusherArtifact = namedtuple("ModelEvaluationArtifact", ["model_pushed_dir"])
+
         
 
 

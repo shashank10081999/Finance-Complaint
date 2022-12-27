@@ -1,6 +1,4 @@
 import sys
-
-from finance_complaint.exception import FinanceException
 from pyspark.ml.pipeline import PipelineModel
 from pyspark.sql import DataFrame
 
@@ -256,7 +254,7 @@ class S3Estimator(CloudEstimator):
         self.s3_client.upload_file(model_zip_file_path, self.bucket_name, save_model_path)
         shutil.rmtree(os.path.dirname(model_zip_file_path))
     
-    def is_model_available(self,key) -> Bool:
+    def is_model_available(self,key) -> bool:
         """
 
         Args:

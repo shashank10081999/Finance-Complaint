@@ -8,4 +8,8 @@ DataValidationConfig = namedtuple('DataValidationConfig', ["accepted_data_dir", 
 
 DataTransformationConfig = namedtuple("DataTransformationConfig", ["file_name" , "export_pipeline_dir" , "transformated_train_dir", "transformated_test_dir","test_size"])
 
-ModelTtrainerConfig = namedtuple("ModelTrainerConfig" , ["base_accuracy", "trained_model_file_path", "metric_list", 'label_indexer_model_dir'])
+ModelTrainerConfig = namedtuple("ModelTrainerConfig" , ["base_accuracy", "trained_model_file_path", "metric_list", 'label_indexer_model_dir'])
+
+ModelEvaluationConfig = namedtuple("ModelEvaluationConfig" , ["model_evaluation_report_file_path", "threshold" , "model_dir" , "metric_list", "bucket_name"])
+
+ModelPusherConfig = namedtuple("ModelPusherConfig", ["model_dir", "bucket_name"])

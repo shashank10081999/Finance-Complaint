@@ -10,8 +10,6 @@ from finance_complaint.config.spark_manager import spark_session
 from finance_complaint.entity.artifact_entity import DataIngestionArtifact
 from finance_complaint.entity.config_entity import DataValidationConfig
 from finance_complaint.entity.schema import FinanceDataSchema
-from finance_complaint.exception import FinanceException
-from finance_complaint.logger import logger
 
 from pyspark.sql.functions import lit
 from finance_complaint.entity.artifact_entity import DataValidationArtifact

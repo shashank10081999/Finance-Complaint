@@ -10,7 +10,6 @@ from pyspark.sql.functions import desc
 from pyspark.sql.functions import col, abs
 from typing import List
 from pyspark.sql.types import TimestampType, LongType
-from finance_complaint.logger import logger
 from finance_complaint.config.spark_manager import spark_session
 
 
@@ -19,13 +18,13 @@ from finance_complaint.config.spark_manager import spark_session
 class DerivedFeatureGenerator(Transformer, HasInputCols, HasOutputCols,DefaultParamsReadable, DefaultParamsWritable):
 
     @keyword_only
-    def __init__(self,inputCols:List[str] = None , outputCols:Lits[str] = None):
+    def __init__(self,inputCols:List[str] = None , outputCols:List[str] = None):
         super(DerivedFeatureGenerator,self).__init__()
         kwargs = self._input_kwargs
         self.seconds_in_day = 60*60*24
         self.setParams(**kwargs)
     
-    def setParams(self,inputCols:List[str] = None , outputCols:Lits[str] = None):
+    def setParams(self,inputCols:List[str] = None , outputCols:List[str] = None):
         kwargs = self._input_kwargs
         self._set(**kwargs)
 
@@ -87,7 +86,7 @@ class FrequencyImputer(Estimator ,HasInputCols, HasOutputCols,DefaultParamsReada
         return self.getOrDefault(self.topCategorys)
 
     @keyword_only
-    def setInputCols(self, value : Lits[str] = None):
+    def setInputCols(self, value : List[str] = None):
         return self._set(inputCols = value)
     
     @keyword_only

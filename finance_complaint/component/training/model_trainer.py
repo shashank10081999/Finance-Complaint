@@ -142,7 +142,7 @@ class ModelTrainer():
 
             model_trainer_artifact = ModelTrainerArtifact (model_trainer_ref_artifact = ref_artifact , 
                                                             model_trainer_train_metric_artifact = train_metric_artifact,
-                                                            model_trainer_train_metric_artifact = test_metric_artifact)
+                                                            model_trainer_test_metric_artifact = test_metric_artifact)
             
             return model_trainer_artifact
         
