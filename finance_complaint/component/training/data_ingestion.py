@@ -211,10 +211,11 @@ class DataIngestion():
 
             feature_store_file_path = os.path.join(self.data_ingestion_config.feature_store_dir,self.data_ingestion_config.file_name)
 
-            artifact = DataIngestionArtifact(
+            data_ingestion_artifact = DataIngestionArtifact(
                     feature_store_file_path=feature_store_file_path,
                     download_dir=self.data_ingestion_config.download_dir,
                     metadata_file_path=self.data_ingestion_config.metadata_file_path)
+            return data_ingestion_artifact
         
         except Exception as e:
             raise e 

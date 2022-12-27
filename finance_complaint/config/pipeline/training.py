@@ -76,7 +76,7 @@ class FinanceConfig():
     def get_data_validation_config(self) -> DataValidationConfig:
 
         try:
-            data_validation_path = os.path.join(self.training_pipeline_config.artifact_dir,DATA_VALIDATION_DIR , self.timestamp)
+            data_validation_path = os.path.join(self.pipeline_config.artifact_dir,DATA_VALIDATION_DIR , self.timestamp)
 
             data_validation_accepted_file_path = os.path.join(data_validation_path,DATA_VALIDATION_ACCEPTED_DATA_DIR)
             data_validation_rejected_dir = os.path.join(data_validation_path,DATA_VALIDATION_REJECTED_DATA_DIR)

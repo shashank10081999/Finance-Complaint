@@ -7,7 +7,7 @@ import sys
 
 def start_training(start=False):
     try:
-        if start:
+        if not start:
             return None 
         TrainingPipeline(FinanceConfig()).start()
     except Exception as e:

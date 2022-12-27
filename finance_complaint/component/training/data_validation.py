@@ -22,7 +22,7 @@ class DataValidation():
 
     def __init__(self,data_validation_config:DataValidationConfig,
                 data_ingestion_artifact:DataIngestionArtifact, 
-                schema:FinanceDataSchema() ,table_name: str = COMPLAINT_TABLE):
+                schema = FinanceDataSchema() ,table_name: str = COMPLAINT_TABLE):
         try:
             super().__init__()
             self.data_validation_config : DataValidationConfig = data_validation_config
@@ -43,13 +43,13 @@ class DataValidation():
         except Exception as e:
             raise e
     
-    def get_missing_report(dataframe):
+    def get_missing_report(self,dataframe):
         try:
             missing_report = dict()
             number_of_rows = dataframe.count()
 
             for i in dataframe.columns:
-                missing_row = dataframe.filter(f"{column} is null").count()
+                missing_row = dataframe.filter(f"{i} is null").count()
                 missing_percentage = (missing_row / number_of_rows)*100
                 missing_report[i] = MissingReport(total_row=number_of_rows , missing_row = missing_row , missing_percentage = missing_percentage)
 
@@ -66,6 +66,13 @@ class DataValidation():
             for column in missing_report:
                 if missing_report[column].missing_percentage < threshold:
                     unwanted_column.append(column)
+
+            print(unwanted_column)
+            for i in list(set(unwanted_column)):
+                if i in self.schema.required_columns:
+                    unwanted_column.remove(i)
+            
+            print(list(set(unwanted_column)))
             
             return list(set(unwanted_column))
         except Exception as e:
@@ -75,7 +82,7 @@ class DataValidation():
         try:
             unwanted_columns = self.get_unwanted_and_high_missing_value_columns(dataframe)
             unwanted_dataframe = dataframe.select(unwanted_columns)
-            unwanted_dataframe = unwanted_dataframe.withColumn("Error message", list("column has many missing values"))
+            unwanted_dataframe = unwanted_dataframe.withColumn("Error_message", lit("column has many missing values"))
 
             rejected_dir = os.path.join(self.data_validation_config.rejected_data_dir,"missing_values_dir")
 
@@ -108,9 +115,11 @@ class DataValidation():
         try:
             required_columns = self.schema.required_columns
 
-            for i in dataframe.columns:
-                if i not in required_columns:
-                    raise Exception(f"Column: {i} is a imp column and its missing for the dataframe , Please check the issuse")
+            for i in required_columns:
+                if i not in dataframe.columns:
+                    #raise Exception(f"Column: {i} is a imp column and its missing for the dataframe , Please check the issuse")
+                    print(f"Column {i} is not present in the dataframe ")
+
         except Exception as e:
             raise e
 

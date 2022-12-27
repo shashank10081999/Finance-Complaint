@@ -15,8 +15,8 @@ def write_yaml_file(file_path, data):
 
 def read_yaml_file(file_path):
     try:
-        with open(file_path, "r") as yaml_file:
-            return yaml.load(yaml_file)
+        with open(file_path, "rb") as yaml_file:
+            return yaml.safe_load(yaml_file)
     except Exception as e:
         raise e
 
